@@ -1,0 +1,30 @@
+[package]
+name = "mdbook-pikchr"
+version = "0.1.0"
+authors = ["Konstantin Podsvirov <konstantin@podsvirov.pro>"]
+description = "A mdbook preprocessor to render pikchr code blocks as images in your book"
+license = "MIT"
+documentation = "https://podsvirov.github.io/mdbook-pikchr/"
+repository = "https://github.com/podsvirov/mdbook-pikchr/"
+readme = "README.md"
+keywords = ["mdbook", "pikchr", "pic", "md", "markdown", "commonmark"]
+edition = "2021"
+
+[[bin]]
+name = "mdbook-pikchr"
+path = "src/main.rs"
+doc = false
+
+[dependencies]
+clap = "3.0.10"
+env_logger = "0.9.0"
+libc = "0.2.100"
+log = "0.4.14"
+mdbook = "0.4.21"
+pulldown-cmark = { version = "0.9.2", default-features = false }
+pulldown-cmark-to-cmark = "10.0.4"
+semver = "1.0.4"
+serde_json = "1.0.66"
+
+[build-dependencies]
+cc = "1.0.73"
