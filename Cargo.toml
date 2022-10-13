@@ -7,7 +7,7 @@ license = "MIT"
 documentation = "https://podsvirov.github.io/mdbook-pikchr/"
 repository = "https://github.com/podsvirov/mdbook-pikchr/"
 readme = "README.md"
-keywords = ["mdbook", "pikchr", "pic", "md", "markdown", "commonmark"]
+keywords = ["mdbook", "pikchr", "pic", "md", "markdown"]
 edition = "2021"
 
 [[bin]]
