@@ -101,7 +101,7 @@ mod mdbook_pikchr {
                         match Pikchr::render(code, None) {
                             Ok(svg) => Event::Html(
                                 format!(
-                                    "<div style=\"max-width:{}px\">\n{}\n</div>\n",
+                                    "<div style=\"margin:0 auto;max-width:{}px\">\n{}\n</div>\n",
                                     svg.width,
                                     svg.to_string()
                                 )
