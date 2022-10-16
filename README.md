@@ -15,7 +15,7 @@ This [crate][5] use builtin copy of the [pikchr.c][6] file downloaded from that 
 ## How it's work
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/podsvirov/mdbook-pikchr/master/demos/diagram.svg" width="397">
+  <img src="https://raw.githubusercontent.com/podsvirov/mdbook-pikchr/master/demos/diagram.svg" width="424">
 </p>
 
 ## Installation
