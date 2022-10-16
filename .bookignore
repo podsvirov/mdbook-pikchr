@@ -2,6 +2,9 @@
 .gitignore
 src
 target
+book.toml
+Cargo.lock
+Cargo.toml
 LICENSE
 Makefile
 build.rs
