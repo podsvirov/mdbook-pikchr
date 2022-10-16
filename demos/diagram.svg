@@ -1,22 +1,23 @@
-<svg xmlns='http://www.w3.org/2000/svg' class="pikchr" viewBox="0 0 397.901 195.84">
-<polygon points="146,37 134,41 134,33" style="fill:rgb(0,0,0)"/>
-<path d="M2,37L140,37"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
-<text x="74" y="25" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Markdown</text>
-<text x="74" y="49" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Source</text>
-<path d="M161,72L232,72A15 15 0 0 0 247 57L247,17A15 15 0 0 0 232 2L161,2A15 15 0 0 0 146 17L146,57A15 15 0 0 0 161 72Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
-<text x="196" y="17" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Markdown</text>
-<text x="196" y="37" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Formatter</text>
-<text x="196" y="57" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">(mdbook)</text>
-<polygon points="391,37 379,41 379,33" style="fill:rgb(0,0,0)"/>
-<path d="M247,37L385,37"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
-<text x="319" y="25" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">HTML+SVG</text>
-<text x="319" y="49" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Output</text>
-<polygon points="196,72 201,84 192,84" style="fill:rgb(0,0,0)"/>
-<polygon points="196,123 192,111 201,111" style="fill:rgb(0,0,0)"/>
-<path d="M196,78L196,117"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
-<path d="M136,193L256,193A15 15 0 0 0 271 178L271,138A15 15 0 0 0 256 123L136,123A15 15 0 0 0 121 138L121,178A15 15 0 0 0 136 193Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
-<text x="196" y="138" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Pikchr</text>
-<text x="196" y="158" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Preprocessor</text>
-<text x="196" y="178" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">(mdbook-pikchr)</text>
+<svg xmlns='http://www.w3.org/2000/svg' class="pikchr" viewBox="0 0 423.581 225.84">
+<path d="M17,223L406,223A15 15 0 0 0 421 208L421,17A15 15 0 0 0 406 2L17,2A15 15 0 0 0 2 17L2,208A15 15 0 0 0 17 223Z"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(255,255,255);" />
+<polygon points="161,52 149,56 149,48" style="fill:rgb(0,0,0)"/>
+<path d="M17,52L155,52"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="89" y="40" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Markdown</text>
+<text x="89" y="64" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Source</text>
+<path d="M176,87L247,87A15 15 0 0 0 262 72L262,32A15 15 0 0 0 247 17L176,17A15 15 0 0 0 161 32L161,72A15 15 0 0 0 176 87Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="211" y="32" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Markdown</text>
+<text x="211" y="52" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Formatter</text>
+<text x="211" y="72" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">(mdbook)</text>
+<polygon points="406,52 394,56 394,48" style="fill:rgb(0,0,0)"/>
+<path d="M262,52L400,52"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="334" y="40" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">HTML+SVG</text>
+<text x="334" y="64" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Output</text>
+<polygon points="211,87 216,99 207,99" style="fill:rgb(0,0,0)"/>
+<polygon points="211,138 207,126 216,126" style="fill:rgb(0,0,0)"/>
+<path d="M211,93L211,132"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M151,208L271,208A15 15 0 0 0 286 193L286,153A15 15 0 0 0 271 138L151,138A15 15 0 0 0 136 153L136,193A15 15 0 0 0 151 208Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="211" y="153" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Pikchr</text>
+<text x="211" y="173" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Preprocessor</text>
+<text x="211" y="193" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">(mdbook-pikchr)</text>
 </svg>
 
