@@ -1,5 +1,11 @@
+D: [
+# ANCHOR: diagram
 arrow right 200% "Markdown" "Source"
 box rad 10px "Markdown" "Formatter" "(mdbook)" fit
 arrow right 200% "HTML+SVG" "Output"
 arrow <-> down 70% from last box.s
 box same "Pikchr" "Preprocessor" "(mdbook-pikchr)" fit
+# ANCHOR_END: diagram
+]
+box color White fill White rad 10px behind D \
+    width D.width+20px height D.height+20px at D.center
