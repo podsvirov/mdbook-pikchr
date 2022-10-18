@@ -5,6 +5,7 @@ use log::{debug, trace, warn};
 use mdbook::book::{Book, BookItem, Chapter};
 use mdbook::errors::Error;
 use mdbook::preprocess::{CmdPreprocessor, Preprocessor, PreprocessorContext};
+use mdbook::utils::new_cmark_parser;
 use pikchr::Pikchr;
 use semver::{Version, VersionReq};
 use std::io;
@@ -71,7 +72,7 @@ fn handle_preprocessing(pre: &dyn Preprocessor) -> Result<(), Error> {
 
 mod mdbook_pikchr {
     use super::*;
-    use pulldown_cmark::{CodeBlockKind, CowStr, Event, Parser, Tag};
+    use pulldown_cmark::{CodeBlockKind, CowStr, Event, Tag};
     use pulldown_cmark_to_cmark::cmark;
 
     pub struct PikchrPreprocessor;
@@ -81,51 +82,61 @@ mod mdbook_pikchr {
             PikchrPreprocessor
         }
 
-        pub fn render_pikchr(&self, chapter: &mut Chapter) -> Result<String, ()> {
+        pub fn render_pikchr(
+            &self,
+            ctx: &PreprocessorContext,
+            chapter: &mut Chapter,
+        ) -> Result<String, ()> {
             let mut buf = String::with_capacity(chapter.content.len());
 
             let mut should_render = false;
-            let events = Parser::new(&chapter.content).map(|event| match event {
-                Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(CowStr::Borrowed(lang)))) => {
-                    if lang.contains("pikchr") {
-                        debug!("Start lang: pikchr");
-                        should_render = true;
-                        Event::Text(CowStr::Borrowed("\n"))
-                    } else {
-                        event
+            let mut curly_quotes = false;
+            if let Some(cfg_curly_quotes) = ctx.config.get("output.html.curly-quotes") {
+                curly_quotes = cfg_curly_quotes.as_bool().unwrap_or(curly_quotes);
+                debug!("curly_quotes: {:?}", curly_quotes);
+            }
+            let events =
+                new_cmark_parser(&chapter.content, curly_quotes).map(|event| match event {
+                    Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(CowStr::Borrowed(lang)))) => {
+                        if lang.contains("pikchr") {
+                            debug!("Start lang: pikchr");
+                            should_render = true;
+                            Event::Text(CowStr::Borrowed("\n"))
+                        } else {
+                            event
+                        }
                     }
-                }
-                Event::Text(CowStr::Borrowed(code)) => {
-                    if should_render {
-                        debug!("Should render: {:?}", code);
-                        match Pikchr::render(code, None) {
-                            Ok(svg) => Event::Html(
-                                format!(
+                    Event::Text(CowStr::Borrowed(code)) => {
+                        if should_render {
+                            debug!("Should render: {:?}", code);
+                            match Pikchr::render(code, None) {
+                                Ok(svg) => Event::Html(
+                                    format!(
                                     "<div style=\"margin:0 auto;max-width:{}px\">\n{}\n</div>\n",
                                     svg.width,
                                     svg.to_string()
                                 )
-                                .into(),
-                            ),
-                            Err(err) => {
-                                Event::Html(format!("<code>{}</code>\n{}", code, err).into())
+                                    .into(),
+                                ),
+                                Err(err) => {
+                                    Event::Html(format!("<code>{}</code>\n{}", code, err).into())
+                                }
                             }
+                        } else {
+                            event
                         }
-                    } else {
-                        event
                     }
-                }
-                Event::End(Tag::CodeBlock(CodeBlockKind::Fenced(CowStr::Borrowed(lang)))) => {
-                    if lang.contains("pikchr") {
-                        debug!("End lang: pikchr");
-                        should_render = false;
-                        Event::Text(CowStr::Borrowed("\n"))
-                    } else {
-                        event
+                    Event::End(Tag::CodeBlock(CodeBlockKind::Fenced(CowStr::Borrowed(lang)))) => {
+                        if lang.contains("pikchr") {
+                            debug!("End lang: pikchr");
+                            should_render = false;
+                            Event::Text(CowStr::Borrowed("\n"))
+                        } else {
+                            event
+                        }
                     }
-                }
-                _ => event,
-            });
+                    _ => event,
+                });
 
             cmark(events, &mut buf)
                 .map(|_| buf)
@@ -149,7 +160,7 @@ mod mdbook_pikchr {
                 if let BookItem::Chapter(ref mut chapter) = *item {
                     debug!("chapter: {}\ncontent: {}\n", chapter.name, chapter.content);
                     let res = self
-                        .render_pikchr(chapter)
+                        .render_pikchr(ctx, chapter)
                         .expect("Rendering pikchr failed");
                     debug!("result: {}\n", res);
                     chapter.content = res;
