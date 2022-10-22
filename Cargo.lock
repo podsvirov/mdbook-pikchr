@@ -745,7 +745,7 @@ dependencies = [
 
 [[package]]
 name = "mdbook-pikchr"
-version = "0.1.3"
+version = "0.1.4"
 dependencies = [
  "cc",
  "clap",
