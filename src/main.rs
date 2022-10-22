@@ -75,6 +75,12 @@ mod mdbook_pikchr {
     use pulldown_cmark::{CodeBlockKind, CowStr, Event, Tag};
     use pulldown_cmark_to_cmark::cmark;
 
+    enum Align {
+        Left,
+        Center,
+        Right,
+    }
+
     pub struct PikchrPreprocessor;
 
     impl PikchrPreprocessor {
@@ -95,12 +101,31 @@ mod mdbook_pikchr {
                 curly_quotes = cfg_curly_quotes.as_bool().unwrap_or(curly_quotes);
                 debug!("curly_quotes: {:?}", curly_quotes);
             }
+            let mut align_default = Align::Center;
+            if let Some(cfg_align) = ctx.config.get("preprocessor.pikchr.align") {
+                align_default = match cfg_align.as_str().unwrap_or("center") {
+                    "left" => Align::Left,
+                    "center" => Align::Center,
+                    "right" => Align::Right,
+                    _ => align_default,
+                };
+            }
+            let mut align = align_default;
             let events =
                 new_cmark_parser(&chapter.content, curly_quotes).map(|event| match event {
                     Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(CowStr::Borrowed(lang)))) => {
                         if lang.contains("pikchr") {
                             debug!("Start lang: pikchr");
                             should_render = true;
+                            if lang.contains("left") {
+                                align = Align::Left;
+                            }
+                            else if lang.contains("center") {
+                                align = Align::Center;
+                            }
+                            else if lang.contains("right") {
+                                align = Align::Right;
+                            }
                             Event::Text(CowStr::Borrowed("\n"))
                         } else {
                             event
@@ -109,10 +134,16 @@ mod mdbook_pikchr {
                     Event::Text(CowStr::Borrowed(code)) => {
                         if should_render {
                             debug!("Should render: {:?}", code);
+                            let margin = match align {
+                                Align::Left => "0 auto 0 0",
+                                Align::Center => "0 auto",
+                                Align::Right => "0 0 0 auto",
+                            };
                             match Pikchr::render(code, None) {
                                 Ok(svg) => Event::Html(
                                     format!(
-                                    "<div style=\"margin:0 auto;max-width:{}px\">\n{}\n</div>\n",
+                                    "<div style=\"margin:{};max-width:{}px\">\n{}\n</div>\n",
+                                    margin,
                                     svg.width,
                                     svg.to_string()
                                 )

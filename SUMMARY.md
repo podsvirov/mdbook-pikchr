@@ -1,8 +1,10 @@
 # Summary
 
-[Introduction](README.md)
+- [Introduction](README.md)
 
-# Demos
+- [Demos](demos/README.md)
+     - [Diagram](demos/diagram.md)
+     - [Error](demos/error.md)
 
-- [Diagram](demos/diagram.md)
-- [Error](demos/error.md)
+- [Configuration](doc/config.md)
+     - [Alignment](doc/align.md)
