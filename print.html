@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Demos</li><li class="chapter-item expanded "><a href="demos/diagram.html"><strong aria-hidden="true">1.</strong> Diagram</a></li><li class="chapter-item expanded "><a href="demos/error.html"><strong aria-hidden="true">2.</strong> Error</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="demos/index.html"><strong aria-hidden="true">2.</strong> Demos</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="demos/diagram.html"><strong aria-hidden="true">2.1.</strong> Diagram</a></li><li class="chapter-item expanded "><a href="demos/error.html"><strong aria-hidden="true">2.2.</strong> Error</a></li></ol></li><li class="chapter-item expanded "><a href="doc/config.html"><strong aria-hidden="true">3.</strong> Configuration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="doc/align.html"><strong aria-hidden="true">3.1.</strong> Alignment</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -163,7 +163,13 @@ to provide a convenient means of showing diagrams.</p>
 </code></pre>
 <h2 id="source-code"><a class="header" href="#source-code">Source code</a></h2>
 <p>Source code available on <a href="https://github.com/podsvirov/mdbook-pikchr">GitHub</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="diagram"><a class="header" href="#diagram">Diagram</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="demos"><a class="header" href="#demos">Demos</a></h1>
+<p>Several demos illustrating the work of the preprocessor are presented.</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Demo</th><th style="text-align: left">Description</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="demos/diagram.html">Diagram</a></td><td style="text-align: left">How it's work was written</td></tr>
+<tr><td style="text-align: left"><a href="demos/error.html">Error</a></td><td style="text-align: left">Error output</td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="diagram"><a class="header" href="#diagram">Diagram</a></h1>
 <p>The diagram:</p>
 <div style="margin:0 auto;max-width:423px">
 <svg xmlns='http://www.w3.org/2000/svg' viewBox="0 0 423.581 225.84">
@@ -207,6 +213,67 @@ box same &quot;Pikchr&quot; &quot;Preprocessor&quot; &quot;(mdbook-pikchr)&quot;
                        ^^^^^^^^
 ERROR: unrecognized token
 </pre></div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="configuration-1"><a class="header" href="#configuration-1">Configuration</a></h1>
+<p>The <code>preprocessor.pikchr</code> table used for preprocessor configuration.</p>
+<p>Supported variables:</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Variable</th><th style="text-align: left">Possible values</th><th style="text-align: left">Default value</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="doc/align.html">align</a></td><td style="text-align: left">&quot;left&quot;, &quot;center&quot;, &quot;right&quot;</td><td style="text-align: left">&quot;center&quot;</td></tr>
+</tbody></table>
+</div>
+<p>Here is an example of what a <code>book.toml</code> file might look like:</p>
+<pre><code class="language-toml">[book]
+title = &quot;Example book&quot;
+authors = [&quot;John Doe&quot;]
+description = &quot;The example book covers examples.&quot;
+
+[preprocessor.pikchr]
+aling = &quot;left&quot;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="alignment"><a class="header" href="#alignment">Alignment</a></h1>
+<h2 id="global"><a class="header" href="#global">Global</a></h2>
+<p>By default, the generated images appears centered.</p>
+<p>You can change default behavior by setting the variable <code>align</code> in table <code>preprocesso.pikchr</code> at your <code>book.toml</code> file .</p>
+<p>If you would prefer that the picturs be left-justifed, put the value <code>&quot;left&quot;</code>.</p>
+<p>If you would prefer that the picturs be right-justifed, put the value <code>&quot;right&quot;</code>.</p>
+<p>The value <code>&quot;center&quot;</code> also possible, but it will do nothing.</p>
+<h2 id="per-picture"><a class="header" href="#per-picture">Per-picture</a></h2>
+<p>Additionaly you can control alignment for individual picture by adding similar keyword after the <code>pikchr</code> class tag.
+Thus:</p>
+<pre><code class="language-markdown">```pikchr,left
+box &quot;left&quot; radius 10px fill white
+```
+</code></pre>
+<p>Results in the following:</p>
+<div style="margin:0 auto 0 0;max-width:112px">
+<svg xmlns='http://www.w3.org/2000/svg' viewBox="0 0 112.32 76.32">
+<path d="M17,74L95,74A15 15 0 0 0 110 59L110,17A15 15 0 0 0 95 2L17,2A15 15 0 0 0 2 17L2,59A15 15 0 0 0 17 74Z"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="56" y="38" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">left</text>
+</svg>
+</div>
+<p>Then:</p>
+<pre><code class="language-markdown">```pikchr,center
+box &quot;center&quot; radius 10px fill white
+```
+</code></pre>
+<p>Results in the following:</p>
+<div style="margin:0 auto;max-width:112px">
+<svg xmlns='http://www.w3.org/2000/svg' viewBox="0 0 112.32 76.32">
+<path d="M17,74L95,74A15 15 0 0 0 110 59L110,17A15 15 0 0 0 95 2L17,2A15 15 0 0 0 2 17L2,59A15 15 0 0 0 17 74Z"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="56" y="38" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">center</text>
+</svg>
+</div>
+<p>And:</p>
+<pre><code class="language-markdown">```pikchr,right
+box &quot;right&quot; radius 10px fill white
+```
+</code></pre>
+<p>Reults in the following:</p>
+<div style="margin:0 0 0 auto;max-width:112px">
+<svg xmlns='http://www.w3.org/2000/svg' viewBox="0 0 112.32 76.32">
+<path d="M17,74L95,74A15 15 0 0 0 110 59L110,17A15 15 0 0 0 95 2L17,2A15 15 0 0 0 2 17L2,59A15 15 0 0 0 17 74Z"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="56" y="38" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">right</text>
+</svg>
+</div>
 
                     </main>
 
