@@ -17,5 +17,5 @@ authors = ["John Doe"]
 description = "The example book covers examples."
 
 [preprocessor.pikchr]
-aling = "left"
+align = "left"
 ```

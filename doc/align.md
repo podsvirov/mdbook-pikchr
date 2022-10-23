@@ -6,9 +6,9 @@ By default, the generated images appears centered.
 
 You can change default behavior by setting the variable `align` in table `preprocesso.pikchr` at your `book.toml` file .
 
-If you would prefer that the picturs be left-justifed, put the value `"left"`.
+If you would prefer that the pictures be left-justifed, put the value `"left"`.
 
-If you would prefer that the picturs be right-justifed, put the value `"right"`.
+If you would prefer that the pictures be right-justifed, put the value `"right"`.
 
 The value `"center"` also possible, but it will do nothing.
 
