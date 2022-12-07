@@ -43,5 +43,5 @@ Source code available on [GitHub][7].
 [3]: https://en.wikipedia.org/wiki/Pic_language
 [4]: https://spec.commonmark.org/0.29/#fenced-code-blocks
 [5]: https://crates.io/crates/mdbook-pikchr
-[6]: https://pikchr.org/home/file?name=pikchr.c&ci=beb9c85f38c9eebb
+[6]: https://pikchr.org/home/file?name=pikchr.c&ci=21ca6b843d65c404
 [7]: https://github.com/podsvirov/mdbook-pikchr
