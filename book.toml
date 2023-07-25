@@ -11,4 +11,4 @@ git-repository-url = "https://github.com/podsvirov/mdbook-pikchr"
 edit-url-template = "https://github.com/podsvirov/mdbook-pikchr/edit/master/{path}"
 
 [preprocessor.pikchr]
-command = "target/debug/mdbook-pikchr"
+command = "target/release/mdbook-pikchr"
