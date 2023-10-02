@@ -5,7 +5,7 @@ WORKDIR /opt/src/mdbook-pikchr
 
 RUN apk --no-cache add cargo
 
-RUN cargo install mdbook@0.4.32
+RUN cargo install mdbook@0.4.35
 RUN cargo install --path . --locked
 
 FROM alpine:latest
