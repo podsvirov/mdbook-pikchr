@@ -3,7 +3,7 @@ title = "mdBook Pikchr"
 authors = ["Konstantin Podsvirov <konstantin@podsvirov.pro>"]
 multilingual = false
 language = "en"
-src = "."
+src = "docs"
 
 [output.html]
 default-theme = "rust"

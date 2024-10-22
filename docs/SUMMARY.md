@@ -6,5 +6,5 @@
      - [Diagram](demos/diagram.md)
      - [Error](demos/error.md)
 
-- [Configuration](doc/config.md)
-     - [Alignment](doc/align.md)
+- [Configuration](config.md)
+     - [Alignment](align.md)

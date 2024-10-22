@@ -1,4 +1,4 @@
-demos/diagram.svg: demos/diagram.pikchr target/release/pikchr
+docs/demos/diagram.svg: docs/demos/diagram.pikchr target/release/pikchr
 	target/release/pikchr --svg-only $< > $@
 
 target/release/pikchr: src/pikchr.c
