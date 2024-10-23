@@ -1,6 +1,6 @@
 mod pikchr;
 use crate::mdbook_pikchr::PikchrPreprocessor;
-use clap::{App, Arg, ArgMatches};
+use clap::{Arg, ArgMatches, Command};
 use log::{debug, trace, warn};
 use mdbook::book::{Book, BookItem, Chapter};
 use mdbook::errors::Error;
@@ -11,11 +11,11 @@ use semver::{Version, VersionReq};
 use std::io;
 use std::process;
 
-pub fn make_app() -> App<'static> {
-    App::new("mdbook-pikchr")
+pub fn make_app() -> Command {
+    Command::new("mdbook-pikchr")
         .about("A mdbook preprocessor to render pikchr code blocks as images in your book")
         .subcommand(
-            App::new("supports")
+            Command::new("supports")
                 .arg(Arg::new("renderer").required(true))
                 .about("Check whether a renderer is supported by this preprocessor"),
         )
@@ -39,7 +39,7 @@ fn main() {
 }
 
 fn handle_supports(sub_args: &ArgMatches) -> ! {
-    let renderer = sub_args.value_of("renderer").expect("Required argument");
+    let renderer = sub_args.get_one::<String>("renderer").expect("Required argument");
 
     if renderer == "html" {
         process::exit(0);
@@ -72,7 +72,7 @@ fn handle_preprocessing(pre: &dyn Preprocessor) -> Result<(), Error> {
 
 mod mdbook_pikchr {
     use super::*;
-    use pulldown_cmark::{CodeBlockKind, CowStr, Event, Tag};
+    use pulldown_cmark::{CodeBlockKind, CowStr, Event, Tag, TagEnd};
     use pulldown_cmark_to_cmark::cmark;
 
     enum Align {
@@ -157,11 +157,11 @@ mod mdbook_pikchr {
                             event
                         }
                     }
-                    Event::End(Tag::CodeBlock(CodeBlockKind::Fenced(CowStr::Borrowed(lang)))) => {
-                        if lang.contains("pikchr") {
+                    Event::End(TagEnd::CodeBlock) => {
+                        if should_render {
                             debug!("End lang: pikchr");
                             should_render = false;
-                            Event::Text(CowStr::Borrowed("\n"))
+                            Event::End(TagEnd::Paragraph)
                         } else {
                             event
                         }
