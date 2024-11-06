@@ -1,6 +1,6 @@
 [package]
 name = "mdbook-pikchr"
-version = "0.1.8"
+version = "0.1.9"
 authors = ["Konstantin Podsvirov <konstantin@podsvirov.pro>"]
 description = "A mdbook preprocessor to render pikchr code blocks as images in your book"
 license = "MIT"
