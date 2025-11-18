@@ -2,10 +2,10 @@ mod pikchr;
 use crate::mdbook_pikchr::PikchrPreprocessor;
 use clap::{Arg, ArgMatches, Command};
 use log::{debug, trace, warn};
-use mdbook::book::{Book, BookItem, Chapter};
-use mdbook::errors::Error;
-use mdbook::preprocess::{CmdPreprocessor, Preprocessor, PreprocessorContext};
-use mdbook::utils::new_cmark_parser;
+use mdbook_markdown::{new_cmark_parser, MarkdownOptions};
+use mdbook_preprocessor::book::{Book, BookItem, Chapter};
+use mdbook_preprocessor::errors::Error;
+use mdbook_preprocessor::{Preprocessor, PreprocessorContext};
 use pikchr::Pikchr;
 use semver::{Version, VersionReq};
 use std::io;
@@ -39,7 +39,9 @@ fn main() {
 }
 
 fn handle_supports(sub_args: &ArgMatches) -> ! {
-    let renderer = sub_args.get_one::<String>("renderer").expect("Required argument");
+    let renderer = sub_args
+        .get_one::<String>("renderer")
+        .expect("Required argument");
 
     if renderer == "html" {
         process::exit(0);
@@ -49,17 +51,17 @@ fn handle_supports(sub_args: &ArgMatches) -> ! {
 }
 
 fn handle_preprocessing(pre: &dyn Preprocessor) -> Result<(), Error> {
-    let (ctx, book) = CmdPreprocessor::parse_input(io::stdin())?;
+    let (ctx, book) = mdbook_preprocessor::parse_input(io::stdin())?;
 
     let book_version = Version::parse(&ctx.mdbook_version)?;
-    let version_req = VersionReq::parse(mdbook::MDBOOK_VERSION)?;
+    let version_req = VersionReq::parse(mdbook_preprocessor::MDBOOK_VERSION)?;
 
     if !version_req.matches(&book_version) {
         eprintln!(
             "Warning: The {} plugin was built against version {} of mdbook, \
              but we're being called from version {}",
             pre.name(),
-            mdbook::MDBOOK_VERSION,
+            mdbook_preprocessor::MDBOOK_VERSION,
             ctx.mdbook_version
         );
     }
@@ -72,7 +74,7 @@ fn handle_preprocessing(pre: &dyn Preprocessor) -> Result<(), Error> {
 
 mod mdbook_pikchr {
     use super::*;
-    use pulldown_cmark::{CodeBlockKind, CowStr, Event, Tag, TagEnd};
+    use mdbook_markdown::pulldown_cmark::{CodeBlockKind, CowStr, Event, Tag, TagEnd};
     use pulldown_cmark_to_cmark::cmark;
 
     enum Align {
@@ -96,14 +98,16 @@ mod mdbook_pikchr {
             let mut buf = String::with_capacity(chapter.content.len());
 
             let mut should_render = false;
-            let mut curly_quotes = false;
-            if let Some(cfg_curly_quotes) = ctx.config.get("output.html.curly-quotes") {
-                curly_quotes = cfg_curly_quotes.as_bool().unwrap_or(curly_quotes);
-                debug!("curly_quotes: {:?}", curly_quotes);
+            let mut options = MarkdownOptions::default();
+            if let Ok(Some(cfg_smart_punctuation)) =
+                ctx.config.get::<bool>("output.html.smart-punctuation")
+            {
+                options.smart_punctuation = cfg_smart_punctuation;
+                debug!("smart_punctuation: {:?}", options.smart_punctuation);
             }
             let mut align_default = Align::Center;
-            if let Some(cfg_align) = ctx.config.get("preprocessor.pikchr.align") {
-                align_default = match cfg_align.as_str().unwrap_or("center") {
+            if let Ok(Some(cfg_align)) = ctx.config.get::<&str>("preprocessor.pikchr.align") {
+                align_default = match cfg_align {
                     "left" => Align::Left,
                     "center" => Align::Center,
                     "right" => Align::Right,
@@ -111,63 +115,60 @@ mod mdbook_pikchr {
                 };
             }
             let mut align = align_default;
-            let events =
-                new_cmark_parser(&chapter.content, curly_quotes).map(|event| match event {
-                    Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(CowStr::Borrowed(lang)))) => {
-                        if lang.contains("pikchr") {
-                            debug!("Start lang: pikchr");
-                            should_render = true;
-                            if lang.contains("left") {
-                                align = Align::Left;
-                            }
-                            else if lang.contains("center") {
-                                align = Align::Center;
-                            }
-                            else if lang.contains("right") {
-                                align = Align::Right;
-                            }
-                            Event::Text(CowStr::Borrowed("\n"))
-                        } else {
-                            event
+            let events = new_cmark_parser(&chapter.content, &options).map(|event| match event {
+                Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(CowStr::Borrowed(lang)))) => {
+                    if lang.contains("pikchr") {
+                        debug!("Start lang: pikchr");
+                        should_render = true;
+                        if lang.contains("left") {
+                            align = Align::Left;
+                        } else if lang.contains("center") {
+                            align = Align::Center;
+                        } else if lang.contains("right") {
+                            align = Align::Right;
                         }
+                        Event::Text(CowStr::Borrowed("\n"))
+                    } else {
+                        event
                     }
-                    Event::Text(CowStr::Borrowed(code)) => {
-                        if should_render {
-                            debug!("Should render: {:?}", code);
-                            let margin = match align {
-                                Align::Left => "0 auto 0 0",
-                                Align::Center => "0 auto",
-                                Align::Right => "0 0 0 auto",
-                            };
-                            match Pikchr::render(code, None) {
-                                Ok(svg) => Event::Html(
-                                    format!(
+                }
+                Event::Text(CowStr::Borrowed(code)) => {
+                    if should_render {
+                        debug!("Should render: {:?}", code);
+                        let margin = match align {
+                            Align::Left => "0 auto 0 0",
+                            Align::Center => "0 auto",
+                            Align::Right => "0 0 0 auto",
+                        };
+                        match Pikchr::render(code, None) {
+                            Ok(svg) => Event::Html(
+                                format!(
                                     "<div style=\"margin:{};max-width:{}px\">\n{}\n</div>\n",
                                     margin,
                                     svg.width,
                                     svg.to_string()
                                 )
-                                    .into(),
-                                ),
-                                Err(err) => {
-                                    Event::Html(format!("<code>{}</code>\n{}", code, err).into())
-                                }
+                                .into(),
+                            ),
+                            Err(err) => {
+                                Event::Html(format!("<code>{}</code>\n{}", code, err).into())
                             }
-                        } else {
-                            event
                         }
+                    } else {
+                        event
                     }
-                    Event::End(TagEnd::CodeBlock) => {
-                        if should_render {
-                            debug!("End lang: pikchr");
-                            should_render = false;
-                            Event::End(TagEnd::Paragraph)
-                        } else {
-                            event
-                        }
+                }
+                Event::End(TagEnd::CodeBlock) => {
+                    if should_render {
+                        debug!("End lang: pikchr");
+                        should_render = false;
+                        Event::End(TagEnd::Paragraph)
+                    } else {
+                        event
                     }
-                    _ => event,
-                });
+                }
+                _ => event,
+            });
 
             cmark(events, &mut buf)
                 .map(|_| buf)
@@ -181,10 +182,8 @@ mod mdbook_pikchr {
         }
 
         fn run(&self, ctx: &PreprocessorContext, mut book: Book) -> Result<Book, Error> {
-            if let Some(cfg) = ctx.config.get_preprocessor(self.name()) {
-                if cfg.contains_key("dark-mode") {
-                    // TODO: Implement dark mode
-                }
+            if ctx.config.contains_key("preprocessor.pikchr.dark-mode") {
+                // TODO: Implement dark mode
             }
 
             book.for_each_mut(|item: &mut BookItem| {
